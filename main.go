@@ -22,7 +22,7 @@ func main() {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(string("pagina inicial"))
+	w.WriteHeader(http.StatusAccepted)
 }
 
 func getCampeonatos(w http.ResponseWriter, r *http.Request) {

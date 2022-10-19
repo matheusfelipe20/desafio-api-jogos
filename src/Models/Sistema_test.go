@@ -24,8 +24,8 @@ func Test_LocalhostOPen(t *testing.T) {
 	}
 	log.Println(string(body))
 
-	if string(body) != string("pagina inicial") {
-		t.Errorf("Sem sucesso!! %v", string(body))
+	if resp.StatusCode != http.StatusAccepted {
+		t.Errorf("Expected %d, received %d", http.StatusAccepted, resp.StatusCode)
 	}
 }
 
