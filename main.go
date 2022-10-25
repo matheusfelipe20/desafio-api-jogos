@@ -15,6 +15,10 @@ func main() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/campeonatos", getCampeonatos).Methods("GET")
+	r.HandleFunc("/eventos", getEventos).Methods("GET")
+	r.HandleFunc("/user/{cpf}", getUserCPF).Methods("GET")
+	r.HandleFunc("/vendas", postVenda).Methods("POST")
+	r.HandleFunc("/vendas", getVenda).Methods("GET")
 	r.HandleFunc("/", home).Methods("GET")
 
 	log.Print("Server started on localhost:8080")
