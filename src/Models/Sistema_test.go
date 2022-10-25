@@ -1,12 +1,9 @@
 package models
 
 import (
-	"encoding/json"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"reflect"
 	"testing"
 )
 
@@ -67,75 +64,4 @@ func Test_ListarJogos(t *testing.T) {
 	if resp.StatusCode != 200 {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
-}
-
-func Test_UserCPF(t *testing.T) {
-
-}
-
-func Test_UserInvalidoCPF(t *testing.T) {
-
-}
-
-func Test_RealizarAposta(t *testing.T) {
-
-}
-
-func Test_UserMenorIdade(t *testing.T) {
-
-}
-
-func Test_JogoDataInvalida(t *testing.T) {
-
-}
-
-func Test_JogoCpfInvalido(t *testing.T) {
-
-}
-
-func Test_JogoInexistente(t *testing.T) {
-
-}
-
-func Test_CampeonatoInexistente(t *testing.T) {
-
-}
-
-func Test_LimeteExcedido(t *testing.T) {
-
-}
-
-func Test_ValorApostaNegativo(t *testing.T) {
-
-}
-
-func Test_ListarApostasRealizadas(t *testing.T) {
-
-}
-
-//Funções para comparar os Json's
-// JSONEqual comparando dois Json
-func JSONEqual(a, b io.Reader) (bool, error) {
-	var j, j2 interface{}
-	d := json.NewDecoder(a)
-	if err := d.Decode(&j); err != nil {
-		return false, err
-	}
-	d = json.NewDecoder(b)
-	if err := d.Decode(&j2); err != nil {
-		return false, err
-	}
-	return reflect.DeepEqual(j2, j), nil
-}
-
-// JSONBytesEqual compara o JSON em fatias de dois bytes.
-func JSONBytesEqual(a, b []byte) (bool, error) {
-	var j, j2 interface{}
-	if err := json.Unmarshal(a, &j); err != nil {
-		return false, err
-	}
-	if err := json.Unmarshal(b, &j2); err != nil {
-		return false, err
-	}
-	return reflect.DeepEqual(j2, j), nil
 }
