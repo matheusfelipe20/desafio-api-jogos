@@ -49,6 +49,70 @@ func Test_ListarCampeonato(t *testing.T) {
 	}
 }
 
+//Teste: Listar Jogos disponíveis (SUCESSO)
+func Test_ListarJogos(t *testing.T) {
+	resp, err := http.Get("http://localhost:8080/eventos")
+	if err != nil {
+		t.Error(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		t.Error(err)
+	}
+	log.Println(string(body))
+
+	if resp.StatusCode != 200 {
+		t.Errorf("Sem sucesso!! %v", string(body))
+	}
+}
+
+func Test_UserCPF(t *testing.T) {
+
+}
+
+func Test_UserInvalidoCPF(t *testing.T) {
+
+}
+
+func Test_RealizarAposta(t *testing.T) {
+
+}
+
+func Test_UserMenorIdade(t *testing.T) {
+
+}
+
+func Test_JogoDataInvalida(t *testing.T) {
+
+}
+
+func Test_JogoCpfInvalido(t *testing.T) {
+
+}
+
+func Test_JogoInexistente(t *testing.T) {
+
+}
+
+func Test_CampeonatoInexistente(t *testing.T) {
+
+}
+
+func Test_LimeteExcedido(t *testing.T) {
+
+}
+
+func Test_ValorApostaNegativo(t *testing.T) {
+
+}
+
+func Test_ListarApostasRealizadas(t *testing.T) {
+
+}
+
 //Funções para comparar os Json's
 // JSONEqual comparando dois Json
 func JSONEqual(a, b io.Reader) (bool, error) {
