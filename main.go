@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/matheusfelipe20/projeto-api-jogos/src/controllers"
@@ -17,9 +16,8 @@ func main() {
 	r.HandleFunc("/cpf", controllers.ListarUsuario).Methods("GET")
 	r.HandleFunc("/", home).Methods("GET")
 
-	port := map[bool]string{true: os.Getenv("PORT"), //Se minha variavel PORT não for declarada
-		false: "8080"}[os.Getenv("PORT") != ""] //Assumo que a porta é 8080
-	http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
+	log.Print("Server started on localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
