@@ -26,7 +26,7 @@ func Test_LocalhostOPen(t *testing.T) {
 	}
 }
 
-//Teste: Listar Campeonatos disponíveis (SUCESSO)
+// Teste: Listar Campeonatos disponíveis (SUCESSO)
 func Test_ListarCampeonato(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/campeonatos")
 	if err != nil {
@@ -46,7 +46,7 @@ func Test_ListarCampeonato(t *testing.T) {
 	}
 }
 
-//Teste: Listar Jogos disponíveis (SUCESSO)
+// Teste: Listar Jogos disponíveis (SUCESSO)
 func Test_ListarJogos(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/eventos")
 	if err != nil {
@@ -68,6 +68,25 @@ func Test_ListarJogos(t *testing.T) {
 
 func Test_UserCPF(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/cpf/36806792979")
+	if err != nil {
+		t.Error(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		t.Error(err)
+	}
+	log.Println(string(body))
+
+	if resp.StatusCode != 200 {
+		t.Errorf("Sem sucesso!! %v", string(body))
+	}
+}
+
+func TestNonExistentUserCPF(t *testing.T) {
+	resp, err := http.Get("http://localhost:8080/cpf/12345678910")
 	if err != nil {
 		t.Error(err)
 	}
