@@ -9,11 +9,10 @@ import (
 	models "github.com/matheusfelipe20/projeto-api-jogos/src/Models"
 )
 
-// GetJogos irá consumir a api do heroku https://apijogos.herokuapp.com/campeonatos
-// Transforma o corpo da resposta em um tipo campeonato
-func GetCampeonatos() []models.Campeonato {
+// GetUser irá consumir a api do heroku https://apijogos.herokuapp.com/cpf
+func GetUser() []models.Usuario {
 
-	api := "https://apijogos.herokuapp.com/campeonatos"
+	api := ("https://apijogos.herokuapp.com/cpf/36806792979")
 	response, err := http.Get(api)
 	if err != nil {
 		log.Println("erro na resposta")
@@ -24,7 +23,7 @@ func GetCampeonatos() []models.Campeonato {
 		log.Println("erro ao converter o json")
 	}
 
-	var campeonatos []models.Campeonato
-	json.Unmarshal(responseData, &campeonatos)
-	return campeonatos
+	var usuarios []models.Usuario
+	json.Unmarshal(responseData, &usuarios)
+	return usuarios
 }

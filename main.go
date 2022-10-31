@@ -13,6 +13,7 @@ func main() {
 
 	r.HandleFunc("/campeonatos", controllers.ListarCampeonatos).Methods("GET")
 	r.HandleFunc("/eventos", controllers.ListarEventos).Methods("GET")
+	r.HandleFunc("/cpf", controllers.ListarUsuario).Methods("GET")
 	r.HandleFunc("/", home).Methods("GET")
 
 	log.Print("Server started on localhost:8080")
