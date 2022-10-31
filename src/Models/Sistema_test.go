@@ -65,3 +65,22 @@ func Test_ListarJogos(t *testing.T) {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
+
+func Test_UserCPF(t *testing.T) {
+	resp, err := http.Get("http://localhost:8080/cpf/36806792979")
+	if err != nil {
+		t.Error(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		t.Error(err)
+	}
+	log.Println(string(body))
+
+	if resp.StatusCode != 200 {
+		t.Errorf("Sem sucesso!! %v", string(body))
+	}
+}
