@@ -13,7 +13,10 @@ func main() {
 
 	r.HandleFunc("/campeonatos", controllers.ListarCampeonatos).Methods("GET")
 	r.HandleFunc("/eventos", controllers.ListarEventos).Methods("GET")
-	r.HandleFunc("/cpf", controllers.ListarUsuario).Methods("GET")
+	r.HandleFunc("/eventos/{id}", controllers.ListarEventosID).Methods("GET")
+	r.HandleFunc("/eventos/campeonato/{id}", controllers.ListarEventosCampeonato).Methods("GET")
+	r.HandleFunc("/eventos/data/{id}", controllers.ListarEventosData).Methods("GET")
+	r.HandleFunc("/cpf/{id}", controllers.ListarUsuario).Methods("GET")
 	r.HandleFunc("/", home).Methods("GET")
 
 	log.Print("Server started on localhost:8080")
