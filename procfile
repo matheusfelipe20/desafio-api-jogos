@@ -1,2 +1,1 @@
-Procrelease: ./release-stask.sh
-web: desafio-api-jogos
+web: bin/desafio-api-jogos

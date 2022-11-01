@@ -1,0 +1,58 @@
+package funcoes
+
+import "testing"
+
+type dataCheck struct {
+	data     string
+	esperado bool
+}
+
+// teste para verificar se o usuario é maior de idade
+func Test_UsuarioMaiorDeIdade(t *testing.T) {
+
+	usuarios := []dataCheck{
+		{
+			data:     "25/05/2000",
+			esperado: true,
+		}, // testando se o usuario é maior de idade
+		{
+			data:     "17/11/2009",
+			esperado: false,
+		}, // testando usuario com menos de 18 anos
+		{
+			data:     "00/00/0000",
+			esperado: false,
+		}, // testando usuario com data de nascimento invalida
+	}
+
+	for _, usr := range usuarios {
+		resultado := ValidadeDataNascimento(usr.data)
+		if resultado != usr.esperado {
+			t.Errorf("Resultado esperado: %v, resultado obtido: %v", usr.esperado, resultado)
+		}
+	}
+
+}
+
+// teste para verificar se a venda passou da validade
+func Test_DataVendaValidade(t *testing.T) {
+
+	vendas := []dataCheck{
+		{
+			data:     "2020-10-10",
+			esperado: true,
+		}, // testando se a venda é valida
+		{
+			data:     "2020-10-11",
+			esperado: false,
+		}, // testando se a venda é invalida
+	}
+
+	for _, venda := range vendas {
+		resultado := ValidadeDataVenda(venda.data)
+		if resultado != venda.esperado {
+			t.Errorf("Resultado esperado: %v, resultado obtido: %v", venda.esperado, resultado)
+		}
+	}
+
+}
