@@ -1,0 +1,58 @@
+(((CHECK))) 1 - Fazer a função ValidadeDataVenda do arquivo ValidatorVenda.go do 
+package services/funcoes passar nos testes escritos em ValidatorData_Test;
+
+
+(((CHECK))) 2 - Excluir a função ValidadeLimiteValor dentro do arquivo ValidatorVenda.go
+
+
+(((CHECK))) 3 - Fazer a função ValidadeDataNascimento do arquivo ValidatorUser.go do
+package services/funcoes passar nos testes escritos em ValidatorData_Test
+
+
+(((CHECK))) 4 - mover o package funcoes que está no services para o package models e 
+garantir que as funções que chamem esse package não sejam afetadas
+
+
+
+
+
+
+// teste para verificar se a venda passou da validadefunc 
+
+TestDataVendaValidade(t *testing.T) {
+
+    vendas := []dataCheck{
+        {
+            data:     "2022-12-11",
+            esperado: true,
+        }, // testando se a venda é valida
+        {
+            data:     "2022-08-20",
+            esperado: false,
+        }, // testando se a venda é invalida
+        {
+            data: "2022-11-03",
+            esperado: true,
+        }, // testando a data um dia antes do jogo como sendo válida
+        {
+            data: "2022-11-02",
+            esperado: false,
+        }, // testando a data no dia do jogo sendo uma data inválida
+        {
+            data: "",
+            esperado: false,
+        }, // testando se a data estiver vazia
+        {
+            data: "0000-00-00",
+            esperado: false,
+        }, // testando se a data estiver com formato inválido
+    }
+
+    for , venda := range vendas {
+        resultado := ValidadeDataVenda(venda.data)
+        if resultado != venda.esperado {
+            t.Errorf("Resultado esperado: %v, resultado obtido: %v", venda.esperado, resultado)
+        }
+    }
+
+}

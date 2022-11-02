@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 
-	"github.com/matheusfelipe20/projeto-api-jogos/src/services/funcoes"
+	"github.com/matheusfelipe20/projeto-api-jogos/src/Models/funcoes"
 )
 
 type Vendas struct {
