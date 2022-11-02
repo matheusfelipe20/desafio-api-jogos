@@ -50,3 +50,9 @@ func MapLimites(a float64, b float64, c float64) []map[string]float64 {
 
 	return limite
 }
+
+func ValidadeLimiteValor(limite_aposta float64, valor_aposta float64) bool {
+
+	return limite_aposta >= valor_aposta
+
+}

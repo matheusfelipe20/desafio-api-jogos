@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/matheusfelipe20/projeto-api-jogos/src/Models/funcoes"
 	"github.com/matheusfelipe20/projeto-api-jogos/src/services/api"
-	"github.com/matheusfelipe20/projeto-api-jogos/src/services/funcoes"
 	"github.com/matheusfelipe20/projeto-api-jogos/src/services/respostas"
 )
 

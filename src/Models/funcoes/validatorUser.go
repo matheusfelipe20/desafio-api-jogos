@@ -8,7 +8,7 @@ import (
 //Validador para verificar se o usuario é maior de idade
 func ValidadeDataNascimento(nascimento string) bool {
 
-	if nascimento == "" {
+	if nascimento == "00/00/0000" {
 		return false
 	}
 

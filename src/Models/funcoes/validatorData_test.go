@@ -12,11 +12,11 @@ func Test_UsuarioMaiorDeIdade(t *testing.T) {
 
 	usuarios := []dataCheck{
 		{
-			data:     "25/05/2000",
+			data:     "20/11/2000",
 			esperado: true,
 		}, // testando se o usuario é maior de idade
 		{
-			data:     "17/11/2009",
+			data:     "17/11/2010",
 			esperado: false,
 		}, // testando usuario com menos de 18 anos
 		{
@@ -38,14 +38,23 @@ func Test_UsuarioMaiorDeIdade(t *testing.T) {
 func Test_DataVendaValidade(t *testing.T) {
 
 	vendas := []dataCheck{
+
 		{
-			data:     "2020-10-10",
+			data:     "2022-10-31",
 			esperado: true,
-		}, // testando se a venda é valida
+		}, // testando a data um dia antes do jogo como sendo válida
 		{
-			data:     "2020-10-11",
+			data:     "2022-11-01",
+			esperado: true,
+		}, // testando a data no dia do jogo sendo uma data válida
+		{
+			data:     "",
 			esperado: false,
-		}, // testando se a venda é invalida
+		}, // testando se a data estiver vazia
+		{
+			data:     "0000-00-00",
+			esperado: false,
+		}, // testando se a data estiver com formato inválido
 	}
 
 	for _, venda := range vendas {
