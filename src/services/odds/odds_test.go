@@ -1,4 +1,4 @@
-package funcoes
+package odds
 
 import (
 	"reflect"
