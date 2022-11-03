@@ -40,13 +40,21 @@ func Test_DataVendaValidade(t *testing.T) {
 	vendas := []dataCheck{
 
 		{
-			data:     "2022-10-31",
+			data:     "2022-11-01",
+			esperado: true,
+		}, // testando a data dias antes do evento
+		{
+			data:     "2022-11-05",
 			esperado: true,
 		}, // testando a data um dia antes do jogo como sendo válida
 		{
-			data:     "2022-11-01",
-			esperado: true,
-		}, // testando a data no dia do jogo sendo uma data válida
+			data:     "2022-11-06",
+			esperado: false,
+		}, // testando a data no dia do jogo sendo uma data inválida
+		{
+			data:     "2022-11-07",
+			esperado: false,
+		}, // testando a data um dia depois do jogo sendo uma data inválida
 		{
 			data:     "",
 			esperado: false,

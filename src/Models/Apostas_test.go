@@ -2,7 +2,6 @@ package models
 
 import (
 	"bytes"
-	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -35,14 +34,10 @@ func Test_RealizarAposta(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
-
-	if resp.StatusCode != http.StatusCreated {
+	
+	// testando se a venda foi realizada com sucesso
+	var expected = "Aposta realizada com sucesso!"
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
@@ -72,14 +67,10 @@ func TestCriarVendaErro_Data(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
-
-	if resp.StatusCode != http.StatusCreated {
+	
+	// testando se houve erro na data do evento
+	expected := `{"erro":"falha ao cadastrar, insira a data do jogo, ou verfique se o jogo ainda está disponivel"}`
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
@@ -109,14 +100,10 @@ func TestCriarVendaErro_CPF(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
-
-	if resp.StatusCode != http.StatusCreated {
+	
+	// testando se houve erro no CPF deve retornar uma mensagem de erro 
+	var expected =  `{"erro":"falha ao cadastrar, cpf inválido"}`
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
@@ -146,14 +133,10 @@ func TestCriarVendaErro_DataNascimento(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
-
-	if resp.StatusCode != http.StatusCreated {
+	
+	// testando se o usuário é menor de idade, deve retornar uma mensagem de erro
+	var expected =  `{"erro":"falha ao cadastrar, usuário menor de idade"}`
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
@@ -182,14 +165,10 @@ func TestCriarVendaErro_LimiteExcedido(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
-
-	if resp.StatusCode != http.StatusCreated {
+	
+	// testando se o valor da aposta é maior que o limite, deve retornar uma mensagem de erro
+	var expected =  `{"erro":"falha ao cadastrar, valor da aposta insuficiente, ou excedeu o limite do valor da aposta"}`
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
@@ -219,14 +198,10 @@ func TestCriarVendaErro_NomeCliente(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
 
-	if resp.StatusCode != http.StatusCreated {
+	// testando se o nome do cliente está vazio, deve retornar uma mensagem de erro
+	var expected =  `{"erro":"falha ao cadastrar, insira o nome do cliente"}`
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
@@ -256,14 +231,10 @@ func TestCriarVendaErro_NomeCampeonato(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
-
-	if resp.StatusCode != http.StatusCreated {
+	
+	// testando se o nome do campeonato está vazio, deve retornar uma mensagem de erro
+	var expected =  `{"erro":"falha ao cadastrar, insira o campeonato"}`
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
@@ -293,14 +264,10 @@ func TestCriarVendaErro_NomeTitulo(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
-
-	if resp.StatusCode != http.StatusCreated {
+	
+	// testando se o nome do titulo está vazio, deve retornar uma mensagem de erro
+	var expected =  `{"erro":"falha ao  cadastrar, insira o titulo do jogo"}`
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
@@ -331,14 +298,10 @@ func TestCriarVendaErro_IDjogo(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	log.Println(string(body))
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
-	}
-
-	if resp.StatusCode != http.StatusCreated {
+	
+	// testando se o ID do jogo é 0, deve retornar uma mensagem de erro
+	var expected =  `{"erro":"id do jogo é igual a 0"}`
+	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
