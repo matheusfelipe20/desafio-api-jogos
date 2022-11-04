@@ -35,11 +35,12 @@ func ListarEventosID(w http.ResponseWriter, r *http.Request) {
 
 func ListarEventosData(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	key := vars["id"]
+	key := vars["data"]
 
 	for _, jogo := range api.GetJogos() {
 		if jogo.Data == key {
 			json.NewEncoder(w).Encode(jogo)
+			return
 		}
 	}
 
