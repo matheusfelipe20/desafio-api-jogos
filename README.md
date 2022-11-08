@@ -19,7 +19,7 @@ O projeto tem como objetivo simular um sistema de apostas esportivas, ele deve c
 
 ## 📁 Como rodar os testes:
 
-Os testes se encontram na pasta:
+Os testes se encontram em:
 ```
 desafio-api-jogos/src/Models
 ```
