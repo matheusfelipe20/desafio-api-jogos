@@ -29,8 +29,8 @@ func Test_LocalhostOPen(t *testing.T) {
 	}
 }
 
-// Teste: Listar Campeonatos disponíveis (SUCESSO)
-func Test_ListarCampeonato(t *testing.T) {
+//Teste para consultar todos os campeonatos disponiveis
+func TestGetCampeonato(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/campeonatos")
 	if err != nil {
 		t.Error(err)
@@ -43,6 +43,7 @@ func Test_ListarCampeonato(t *testing.T) {
 	}
 	log.Println(string(body))
 
+	//Valor esperado pela consulta
 	campeonatosCadastrado := []byte(`[{"id":30,"titulo":"Brasileirão - Serie A"},{"id":35,"titulo":"Copa América - Feminina"},{"id":36,"titulo":"Uruguai - Primeira Divisão"}]`)
 
 	eq, err := JSONBytesEqual(body, campeonatosCadastrado)
@@ -50,6 +51,7 @@ func Test_ListarCampeonato(t *testing.T) {
 		log.Println(err)
 	}
 
+	//Comparação do valor esperado com recebido
 	if !eq {
 		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, campeonatosCadastrado)
 	}
@@ -59,8 +61,8 @@ func Test_ListarCampeonato(t *testing.T) {
 	}
 }
 
-// Teste: Listar Jogos disponíveis (SUCESSO)
-func Test_ListarJogos(t *testing.T) {
+//Teste para consultar todos os jogos
+func TestGetEventos(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/eventos")
 	if err != nil {
 		t.Error(err)
@@ -73,6 +75,7 @@ func Test_ListarJogos(t *testing.T) {
 	}
 	log.Println(string(body))
 
+	//Valor esperado pela consulta
 	jogosCadastrados := []byte(`[{"id":354858757161272,"titulo":"São Paulo x Flamengo","id_campeonato":30,"opcoes":[{"1":2.5},{"x":3.1},{"2":1.5}]},
 	{"id":354858757161273,"titulo":"Fluminense x Palmeiras","id_campeonato":30,"opcoes":[{"1":1.25},{"x":4.5},{"2":3.9}]},
 	{"id":354858757161274,"titulo":"Botafogo x Santos","id_campeonato":30,"opcoes":[{"1":10.14},{"x":2.5},{"2":1.7}]},
@@ -88,6 +91,7 @@ func Test_ListarJogos(t *testing.T) {
 		log.Println(err)
 	}
 
+	//Comparação do valor esperado com recebido
 	if !eq {
 		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, jogosCadastrados)
 	}
@@ -97,6 +101,7 @@ func Test_ListarJogos(t *testing.T) {
 	}
 }
 
+//Teste para verficar a filtragem por ID Campeonato
 func TestGetJogoIDCampeonato(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/eventos/campeonato/30")
 	if err != nil {
@@ -116,6 +121,7 @@ func TestGetJogoIDCampeonato(t *testing.T) {
 	}
 }
 
+//Teste para verificar o error de consulta por ID Campeonato | ID Campeonato não encontrado (NotFound)
 func TestNonExistentJogoIDCampeonato(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/eventos/campeonato/20")
 	if err != nil {
@@ -135,6 +141,7 @@ func TestNonExistentJogoIDCampeonato(t *testing.T) {
 	}
 }
 
+//Teste para verficar a filtragem por ID Jogo
 func TestGetJogoID(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/eventos/354858757161276")
 	if err != nil {
@@ -148,13 +155,14 @@ func TestGetJogoID(t *testing.T) {
 	}
 	log.Println(string(body))
 
+	//Valor esperado pela busca por ID Jogo
 	jogoCadastradoID := []byte(`{"id":354858757161276,"titulo":"Ceará x Avaí","id_campeonato":30,"opcoes":[{"1":10.14},{"x":2.5},{"2":1.7}]}`)
 
 	eq, err := JSONBytesEqual(body, jogoCadastradoID)
 	if err != nil {
 		log.Println(err)
 	}
-
+	//Comparação do valor esperado com recebido
 	if !eq {
 		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, jogoCadastradoID)
 	}
@@ -165,6 +173,7 @@ func TestGetJogoID(t *testing.T) {
 
 }
 
+//Teste para verificar o error de consulta por ID Jogo | ID Jogo não encontrado (NotFound)
 func TestNonExistentJogo(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/eventos/65420162165499")
 	if err != nil {
@@ -184,6 +193,7 @@ func TestNonExistentJogo(t *testing.T) {
 	}
 }
 
+//Teste para verificar a filtragem de eventos(jogos) por data
 func TestGetJogoData(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/eventos/data/2022-11-11")
 	if err != nil {
@@ -197,13 +207,14 @@ func TestGetJogoData(t *testing.T) {
 	}
 	log.Println(string(body))
 
+	//Valor esperado pela consulta
 	jogoCadastradoData := []byte(`{"id":65489162165499,"titulo":"Deportivo Maldonado x Torque da Cidade de Montevideu","id_campeonato":36,"data":"2022-11-11","opcoes":[{"1":1.25},{"x":4.5},{"2":3.9}],"limites":[{"1":0},{"x":0},{"2":0}]}`)
 
 	eq, err := JSONBytesEqual(body, jogoCadastradoData)
 	if err != nil {
 		log.Println(err)
 	}
-
+	//Comparar valor esperado com o recebido
 	if !eq {
 		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, jogoCadastradoData)
 	}
@@ -214,6 +225,7 @@ func TestGetJogoData(t *testing.T) {
 
 }
 
+//Teste para verificar o error de consulta por Data | Data não encontrada (NotFound)
 func TestNonExistentDataJogo(t *testing.T) {
 	resp, err := http.Get("http://localhost:8080/eventos/data/2022-10-01")
 	if err != nil {
