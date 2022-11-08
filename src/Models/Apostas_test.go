@@ -37,6 +37,7 @@ func Test_RealizarAposta(t *testing.T) {
 	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
+	
 }
 
 //Criar bilhete de aposta (Erro Data Passada)
