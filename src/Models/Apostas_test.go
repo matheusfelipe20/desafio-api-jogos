@@ -31,7 +31,7 @@ func Test_RealizarAposta(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
+
 	// testando se a venda foi realizada com sucesso
 	var expected = "Aposta realizada com sucesso!"
 	if string(body) != expected {
@@ -64,7 +64,7 @@ func TestCriarVendaErro_Data(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
+
 	// testando se houve erro na data do evento
 	expected := `{"erro":"falha ao cadastrar, insira a data do jogo, ou verfique se o jogo ainda está disponivel"}`
 	require.JSONEq(t, expected, string(body))
@@ -95,9 +95,9 @@ func TestCriarVendaErro_CPF(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
-	// testando se houve erro no CPF deve retornar uma mensagem de erro 
-	var expected =  `{"erro":"falha ao cadastrar, cpf inválido"}`
+
+	// testando se houve erro no CPF deve retornar uma mensagem de erro
+	var expected = `{"erro":"falha ao cadastrar, cpf inválido"}`
 	require.JSONEq(t, expected, string(body))
 }
 
@@ -126,9 +126,9 @@ func TestCriarVendaErro_DataNascimento(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
+
 	// testando se o usuário é menor de idade, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao cadastrar, usuário menor de idade"}`
+	var expected = `{"erro":"falha ao cadastrar, usuário menor de idade"}`
 	require.JSONEq(t, expected, string(body))
 }
 
@@ -156,9 +156,9 @@ func TestCriarVendaErro_LimiteExcedido(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
+
 	// testando se o valor da aposta é maior que o limite, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao cadastrar, valor da aposta insuficiente, ou excedeu o limite do valor da aposta"}`
+	var expected = `{"erro":"falha ao cadastrar, valor da aposta insuficiente, ou excedeu o limite do valor da aposta"}`
 	require.JSONEq(t, expected, string(body))
 }
 
@@ -189,7 +189,7 @@ func TestCriarVendaErro_NomeCliente(t *testing.T) {
 	}
 
 	// testando se o nome do cliente está vazio, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao cadastrar, insira o nome do cliente"}`
+	var expected = `{"erro":"falha ao cadastrar, insira o nome do cliente"}`
 	require.JSONEq(t, expected, string(body))
 }
 
@@ -218,9 +218,9 @@ func TestCriarVendaErro_NomeCampeonato(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
+
 	// testando se o nome do campeonato está vazio, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao cadastrar, insira o campeonato"}`
+	var expected = `{"erro":"falha ao cadastrar, insira o campeonato"}`
 	require.JSONEq(t, expected, string(body))
 }
 
@@ -249,9 +249,9 @@ func TestCriarVendaErro_NomeTitulo(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
+
 	// testando se o nome do titulo está vazio, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao  cadastrar, insira o titulo do jogo"}`
+	var expected = `{"erro":"falha ao  cadastrar, insira o titulo do jogo"}`
 	require.JSONEq(t, expected, string(body))
 }
 
@@ -281,8 +281,8 @@ func TestCriarVendaErro_IDjogo(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
+
 	// testando se o ID do jogo é 0, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"id do jogo é igual a 0"}`
+	var expected = `{"erro":"id do jogo é igual a 0"}`
 	require.JSONEq(t, expected, string(body))
 }

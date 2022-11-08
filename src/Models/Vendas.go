@@ -28,7 +28,7 @@ func (vd *Vendas) ValidarVendas() error {
 		return errors.New("id do jogo é igual a 0")
 	}
 	if verificarTituloJogo := funcoes.ValidarCampo(vd.Titulo_jogo); verificarTituloJogo {
-		return errors.New("falha ao  cadastrar, insira o titulo do jogo")
+		return errors.New("falha ao cadastrar, insira o titulo do jogo")
 	}
 	if verificarCampeonato := funcoes.ValidarCampo(vd.Campeonato); !verificarCampeonato {
 		return errors.New("falha ao cadastrar, insira o campeonato")

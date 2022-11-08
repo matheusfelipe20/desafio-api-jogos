@@ -184,15 +184,12 @@ func TestNonExistentJogo(t *testing.T) {
 	}
 }
 
-//ARRUMAR ESSES TESTES: CPF
-
-func Test_UserCPF(t *testing.T) {
-	resp, err := http.Get("http://localhost:8080/cpf/36820792979")
+func TestGetJogoData(t *testing.T) {
+	resp, err := http.Get("http://localhost:8080/eventos/data/2022-11-11")
 	if err != nil {
 		t.Error(err)
 	}
 	defer resp.Body.Close()
-
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
@@ -200,13 +197,25 @@ func Test_UserCPF(t *testing.T) {
 	}
 	log.Println(string(body))
 
-	if resp.StatusCode != 200 {
-		t.Errorf("Sem sucesso!! %v", string(body))
+	jogoCadastradoData := []byte(`{"id":65489162165499,"titulo":"Deportivo Maldonado x Torque da Cidade de Montevideu","id_campeonato":36,"data":"2022-11-11","opcoes":[{"1":1.25},{"x":4.5},{"2":3.9}],"limites":[{"1":0},{"x":0},{"2":0}]}`)
+
+	eq, err := JSONBytesEqual(body, jogoCadastradoData)
+	if err != nil {
+		log.Println(err)
 	}
+
+	if !eq {
+		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, jogoCadastradoData)
+	}
+
+	if err != nil {
+		t.Errorf("Expected nil, received %s", err.Error())
+	}
+
 }
 
-func TestNonExistentUserCPF(t *testing.T) {
-	resp, err := http.Get("http://localhost:8080/cpf/12345678910")
+func TestNonExistentDataJogo(t *testing.T) {
+	resp, err := http.Get("http://localhost:8080/eventos/data/2022-10-01")
 	if err != nil {
 		t.Error(err)
 	}
@@ -219,7 +228,7 @@ func TestNonExistentUserCPF(t *testing.T) {
 	}
 	log.Println(string(body))
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusNotFound {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
 }
