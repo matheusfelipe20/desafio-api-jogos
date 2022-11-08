@@ -31,7 +31,7 @@ func Test_RealizarAposta(t *testing.T) {
 	}
 
 	// testando se a venda foi realizada com sucesso
-	var expected = "Aposta realizada com sucesso!"
+	expected := "Aposta realizada com sucesso!"
 	if string(body) != expected {
 		t.Errorf("Sem sucesso!! %v", string(body))
 	}
