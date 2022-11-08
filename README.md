@@ -13,4 +13,4 @@ O projeto tem como objetivo simular um sistema de apostas esportivas, ele deve c
 - Consultar os jogos disponíveis: GET `/eventos`;
 - Consultar os campeonatos disponíveis: GET `/campeonatos`;
 - Consultar informações dos usuários do sistema: GET `/cpf/{cpf}`;
-- Filtrar eventos por: GET `/eventos/{id}`, `/eventos/{campeonato}` e `/eventos/{data}`.
+- Filtrar eventos por: GET `/eventos/{id}`, `/eventos/campeonato/{id}` e `/eventos/data/{data}`.
