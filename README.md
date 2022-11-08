@@ -24,9 +24,12 @@ Os testes se encontram na pasta:
 desafio-api-jogos/src/Models
 ```
 Nome dos arquivos: `Apostas_test.go` e `Sistema_test.go`.
-
-E também na pasta:
 ```
 desafio-api-jogos/src/Models/funcoes
 ```
 Nome dos arquivos: `validatorCPF_test.go`, `validatorData_test.go` e `validatorLimite_test.go`.
+
+```
+desafio-api-jogos/src/services/odds
+```
+Nome do arquivo: `odds_test.go`
