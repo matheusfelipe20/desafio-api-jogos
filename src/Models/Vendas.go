@@ -27,13 +27,16 @@ func (vd *Vendas) ValidarVendas() error {
 	if verificarIdJogo := funcoes.ValidadeID(uint64(vd.Id_jogo)); !verificarIdJogo {
 		return errors.New("id do jogo é igual a 0")
 	}
-	if verificarTituloJogo := funcoes.ValidarCampo(vd.Titulo_jogo); verificarTituloJogo {
+
+	if verificarTituloJogo := funcoes.ValidarCampo(vd.Titulo_jogo); !verificarTituloJogo {
 		return errors.New("falha ao cadastrar, insira o titulo do jogo")
 	}
+
 	if verificarCampeonato := funcoes.ValidarCampo(vd.Campeonato); !verificarCampeonato {
 		return errors.New("falha ao cadastrar, insira o campeonato")
 	}
-	if verificarDataJogo := funcoes.ValidadeDataVenda(vd.Data_jogo); !verificarDataJogo {
+
+	if verficarDataJogo := funcoes.ValidadeDataVenda(vd.Data_jogo); verficarDataJogo {
 		return errors.New("falha ao cadastrar, insira a data do jogo, ou verfique se o jogo ainda está disponivel")
 	}
 	if verificarCpfCliente, _ := funcoes.VerificarCPFbyString(vd.Cliente_cpf); !verificarCpfCliente {
