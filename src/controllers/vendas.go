@@ -13,8 +13,6 @@ import (
 	"github.com/matheusfelipe20/projeto-api-jogos/src/services/respostas"
 )
 
-
-
 // RealizarVenda irá realizar uma venda e cadastrar no banco de dados
 func RealizarVenda(w http.ResponseWriter, r *http.Request) {
 

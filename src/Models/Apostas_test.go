@@ -3,20 +3,21 @@ package models
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"reflect"
 	"testing"
-
-	"github.com/stretchr/testify/require"
 )
 
+//Sucess
 func Test_RealizarAposta(t *testing.T) {
 
 	bilhete := []byte(`{
   		"id_jogo": 354858757161272,
   		"opcao_aposta": "1",
-  		"valor_aposta": 125,
+  		"valor_aposta": 100,
   		"cliente_cpf": "368.067.929-79"
     }`)
 
@@ -26,7 +27,6 @@ func Test_RealizarAposta(t *testing.T) {
 		t.Error(err)
 	}
 	defer resp.Body.Close()
-
 
 	// testando se a venda foi realizada com sucesso
 	expected := "Aposta realizada com sucesso!"
@@ -39,26 +39,23 @@ func Test_RealizarAposta(t *testing.T) {
 	if respVend.Message != expected {
 		t.Errorf("Expected %s, got %s", expected, respVend.Message)
 	}
-	
+
+	if respVend.Code != "200" {
+		t.Errorf("Expected %s, got %s", "200", respVend.Code)
+	}
 }
 
+func Test_ErroValorLimite(t *testing.T) {
 
-
-//Criar bilhete de aposta (Erro Data Passada)
-func TestCriarVendaErro_Data(t *testing.T) {
+	bilhete := []byte(`{
+  		"id_jogo": 354858757161272,
+  		"opcao_aposta": "1",
+  		"valor_aposta": 200,
+  		"cliente_cpf": "368.067.929-79"
+    }`)
 
 	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
-		bytes.NewBuffer([]byte(`{
-			"id_jogo": 354858757161272,
-  			"titulo_jogo": "São Paulo x Flamengo",
-  			"campeonato": "Brasileirão - Serie A",
-  			"data_jogo": "2022-08-30",
-  			"opcao_aposta": "casa",
-  			"valor_aposta": 150,
-  			"cliente_nome": "Bello Moreira Alcântara",
-  			"cliente_cpf": "659.102.554-52",
-  			"cliente_nascimento": "01/01/2000"
-    		}`)))
+		bytes.NewBuffer(bilhete))
 	if err != nil {
 		t.Error(err)
 	}
@@ -69,27 +66,37 @@ func TestCriarVendaErro_Data(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
-	// testando se houve erro na data do evento
-	expected := `{"erro":"falha ao cadastrar, insira a data do jogo, ou verfique se o jogo ainda está disponivel"}`
-	require.JSONEq(t, expected, string(body))
+	pro := Vendas{}
+	err = json.Unmarshal([]byte(string(body)), &pro)
+	if err != nil {
+		log.Println(err)
+	}
+
+	//Valor do Erro esperado em Bytes
+	expected := `{"erro":"falha ao cadastrar, valor da aposta insuficiente, ou excedeu o limite do valor da aposta"}`
+
+	eq, err := JSONBytesEqual(body, []byte(expected))
+	if err != nil {
+		log.Println(err)
+	}
+
+	//Comparação dos erros: erro recebido pelo body e o erro esperad
+	if !eq {
+		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, expected)
+	}
 }
 
-//Criar bilhete de aposta (Erro CPF invalido)
-func TestCriarVendaErro_CPF(t *testing.T) {
+func Test_ErroIDJogo(t *testing.T) {
+
+	bilhete := []byte(`{
+  		"id_jogo": 0,
+  		"opcao_aposta": "1",
+  		"valor_aposta": 100,
+  		"cliente_cpf": "368.067.929-79"
+    }`)
 
 	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
-		bytes.NewBuffer([]byte(`{
-			"id_jogo": 354858757161272,
-  			"titulo_jogo": "São Paulo x Flamengo",
-  			"campeonato": "Brasileirão - Serie A",
-  			"data_jogo": "2022-09-30",
-  			"opcao_aposta": "casa",
-  			"valor_aposta": 150,
-  			"cliente_nome": "Bello Moreira Alcântara",
-  			"cliente_cpf": "709.102.554-82",
-  			"cliente_nascimento": "01/01/2000"
-    	}`)))
+		bytes.NewBuffer(bilhete))
 	if err != nil {
 		t.Error(err)
 	}
@@ -100,27 +107,37 @@ func TestCriarVendaErro_CPF(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
-	// testando se houve erro no CPF deve retornar uma mensagem de erro 
-	var expected =  `{"erro":"falha ao cadastrar, cpf inválido"}`
-	require.JSONEq(t, expected, string(body))
+	pro := Vendas{}
+	err = json.Unmarshal([]byte(string(body)), &pro)
+	if err != nil {
+		log.Println(err)
+	}
+
+	//Valor do Erro esperado em Bytes
+	expected := `{"erro":"id do jogo é igual a 0"}`
+
+	eq, err := JSONBytesEqual(body, []byte(expected))
+	if err != nil {
+		log.Println(err)
+	}
+
+	//Comparação dos erros: erro recebido pelo body e o erro esperad
+	if !eq {
+		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, expected)
+	}
 }
 
-//Criar bilhete de aposta (Erro Menor de idade)
-func TestCriarVendaErro_DataNascimento(t *testing.T) {
+func Test_ErroClienteCpf(t *testing.T) {
+
+	bilhete := []byte(`{
+  		"id_jogo": 354858757161272,
+  		"opcao_aposta": "1",
+  		"valor_aposta": 50,
+  		"cliente_cpf": "400.067.929-82"
+    }`)
 
 	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
-		bytes.NewBuffer([]byte(`{
-			"id_jogo": 354858757161272,
-  			"titulo_jogo": "São Paulo x Flamengo",
-  			"campeonato": "Brasileirão - Serie A",
-  			"data_jogo": "2022-09-30",
-  			"opcao_aposta": "casa",
-  			"valor_aposta": 150,
-  			"cliente_nome": "Bello Moreira Alcântara",
-  			"cliente_cpf": "659.102.554-52",
-  			"cliente_nascimento": "01/01/2008"
-    	}`)))
+		bytes.NewBuffer(bilhete))
 	if err != nil {
 		t.Error(err)
 	}
@@ -131,163 +148,50 @@ func TestCriarVendaErro_DataNascimento(t *testing.T) {
 		log.Println(err)
 		t.Error(err)
 	}
-	
-	// testando se o usuário é menor de idade, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao cadastrar, usuário menor de idade"}`
-	require.JSONEq(t, expected, string(body))
-}
-
-//Criar bilhete de aposta (Erro limite do valor da aposta excedido)
-func TestCriarVendaErro_LimiteExcedido(t *testing.T) {
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
-		bytes.NewBuffer([]byte(`{
-			"id_jogo": 354858757161272,
-  			"titulo_jogo": "São Paulo x Flamengo",
-  			"campeonato": "Brasileirão - Serie A",
-  			"data_jogo": "2022-09-30",
-  			"opcao_aposta": "casa",
-  			"valor_aposta": 550,
-  			"cliente_nome": "Bello Moreira Alcântara",
-  			"cliente_cpf": "659.102.554-52",
-  			"cliente_nascimento": "01/01/2000"
-    	}`)))
-	if err != nil {
-		t.Error(err)
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
+	pro := Vendas{}
+	err = json.Unmarshal([]byte(string(body)), &pro)
 	if err != nil {
 		log.Println(err)
-		t.Error(err)
 	}
-	
-	// testando se o valor da aposta é maior que o limite, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao cadastrar, valor da aposta insuficiente, ou excedeu o limite do valor da aposta"}`
-	require.JSONEq(t, expected, string(body))
-}
 
-//Criar bilhete de aposta (Erro Nome do cliente vazio)
-func TestCriarVendaErro_NomeCliente(t *testing.T) {
+	//Valor do Erro esperado em Bytes
+	expected := `{"erro":"falha ao cadastrar, cpf inválido"}`
 
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
-		bytes.NewBuffer([]byte(`{
-			"id_jogo": 354858757161272,
-  			"titulo_jogo": "São Paulo x Flamengo",
-  			"campeonato": "Brasileirão - Serie A",
-  			"data_jogo": "2022-09-30",
-  			"opcao_aposta": "casa",
-  			"valor_aposta": 150,
-  			"cliente_nome": "",
-  			"cliente_cpf": "659.102.554-52",
-  			"cliente_nascimento": "01/01/2000"
-    	}`)))
-	if err != nil {
-		t.Error(err)
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
+	eq, err := JSONBytesEqual(body, []byte(expected))
 	if err != nil {
 		log.Println(err)
-		t.Error(err)
 	}
 
-	// testando se o nome do cliente está vazio, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao cadastrar, insira o nome do cliente"}`
-	require.JSONEq(t, expected, string(body))
+	//Comparação dos erros: erro recebido pelo body e o erro esperad
+	if !eq {
+		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, expected)
+	}
 }
 
-//Criar bilhete de aposta (Erro Nome do campeonato vazio)
-func TestCriarVendaErro_NomeCampeonato(t *testing.T) {
+//Funções para comparar os Json's
 
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
-		bytes.NewBuffer([]byte(`{
-			"id_jogo": 354858757161272,
-  			"titulo_jogo": "São Paulo x Flamengo",
-  			"campeonato": "",
-  			"data_jogo": "2022-09-30",
-  			"opcao_aposta": "casa",
-  			"valor_aposta": 125,
-  			"cliente_nome": "Bello Moreira Alcântara",
-  			"cliente_cpf": "659.102.554-52",
-  			"cliente_nascimento": "01/01/2000"
-    	}`)))
-	if err != nil {
-		t.Error(err)
+// JSONEqual comparando dois Json
+func JSONEqual(a, b io.Reader) (bool, error) {
+	var j, j2 interface{}
+	d := json.NewDecoder(a)
+	if err := d.Decode(&j); err != nil {
+		return false, err
 	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Println(err)
-		t.Error(err)
+	d = json.NewDecoder(b)
+	if err := d.Decode(&j2); err != nil {
+		return false, err
 	}
-	
-	// testando se o nome do campeonato está vazio, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao cadastrar, insira o campeonato"}`
-	require.JSONEq(t, expected, string(body))
+	return reflect.DeepEqual(j2, j), nil
 }
 
-//Criar bilhete de aposta (Erro Nome do titulo vazio)
-func TestCriarVendaErro_NomeTitulo(t *testing.T) {
-
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
-		bytes.NewBuffer([]byte(`{
-			"id_jogo": 354858757161272,
-  			"titulo_jogo": "",
-  			"campeonato": "Brasileirão - Serie A",
-  			"data_jogo": "2022-09-30",
-  			"opcao_aposta": "1",
-  			"valor_aposta": 125,
-  			"cliente_nome": "Bello Moreira Alcântara",
-  			"cliente_cpf": "659.102.554-52",
-  			"cliente_nascimento": "01/01/2000"
-    	}`)))
-	if err != nil {
-		t.Error(err)
+// JSONBytesEqual compara o JSON em fatias de dois bytes.
+func JSONBytesEqual(a, b []byte) (bool, error) {
+	var j, j2 interface{}
+	if err := json.Unmarshal(a, &j); err != nil {
+		return false, err
 	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Println(err)
-		t.Error(err)
+	if err := json.Unmarshal(b, &j2); err != nil {
+		return false, err
 	}
-	
-	// testando se o nome do titulo está vazio, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"falha ao  cadastrar, insira o titulo do jogo"}`
-	require.JSONEq(t, expected, string(body))
-}
-
-//Criar bilhete de aposta (Erro ID do jogo: 0)
-func TestCriarVendaErro_IDjogo(t *testing.T) {
-
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
-		bytes.NewBuffer([]byte(`{
-			"id_jogo": 0,
-			"titulo_jogo": "São Paulo x Flamengo",
- 			"campeonato": "Brasileirão - Serie A",
-  			"data_jogo": "2023-10-31",
-  			"opcao_aposta": "1",
-			"valor_aposta": 120,
-			"limite_aposta": 300,
-			"cliente_nome": "Helena",
-			"cliente_cpf": "231.300.114-80",
-			"cliente_nascimento": "30/08/2001"
-    	}`)))
-	if err != nil {
-		t.Error(err)
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Println(err)
-		t.Error(err)
-	}
-	
-	// testando se o ID do jogo é 0, deve retornar uma mensagem de erro
-	var expected =  `{"erro":"id do jogo é igual a 0"}`
-	require.JSONEq(t, expected, string(body))
+	return reflect.DeepEqual(j2, j), nil
 }

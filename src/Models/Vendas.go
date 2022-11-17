@@ -7,11 +7,10 @@ import (
 )
 
 // struct para teste de vendas
-type RespVenda struct{
-	Code string
+type RespVenda struct {
+	Code    string
 	Message string
 }
-
 
 type Vendas struct {
 	Id                 int     `json:"id,omitempty"`
