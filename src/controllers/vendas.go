@@ -86,8 +86,9 @@ func RealizarVenda(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resultadoOK := `{"sucesso":"Aposta realizada"}`
-	respostas.JSON(w, http.StatusCreated, resultadoOK)
+	resultadoOK := "Aposta realizada com sucesso!"
+	respVenda := models.RespVenda{Code: "200", Message: resultadoOK}
+	respostas.JSON(w, http.StatusCreated, respVenda)
 }
 
 // ListarVendas irá buscar todas as vendas feitas

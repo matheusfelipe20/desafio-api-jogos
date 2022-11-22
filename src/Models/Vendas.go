@@ -6,6 +6,12 @@ import (
 	"github.com/matheusfelipe20/projeto-api-jogos/src/Models/funcoes"
 )
 
+// struct para teste de vendas
+type RespVenda struct {
+	Code    string
+	Message string
+}
+
 type Vendas struct {
 	Id                 int     `json:"id,omitempty"`
 	Id_jogo            int     `json:"id_jogo,omitempty"`
