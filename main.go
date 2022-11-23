@@ -24,7 +24,6 @@ func main() {
 	r.HandleFunc("/vendas", controllers.ListarVendas).Methods("GET")
 	r.HandleFunc("/vendas", controllers.RealizarVenda).Methods("POST")
 
-	log.Print("Server started on localhost:8080")
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", database.Porta), r))
 }
 
