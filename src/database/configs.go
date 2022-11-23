@@ -21,7 +21,7 @@ func Load() {
 		log.Fatal("Erro ao carregar o arquivo .env", err)
 	}
 
-	Porta, err = strconv.Atoi(os.Getenv("API_PORT"))
+	Porta, err = strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		Porta = 8080
 	}
