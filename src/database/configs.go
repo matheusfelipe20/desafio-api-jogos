@@ -23,7 +23,7 @@ func Load() {
 
 	Porta, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
-		Porta = 4000
+		Porta = 8080
 	}
 
 	stringConexaoBanco = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
