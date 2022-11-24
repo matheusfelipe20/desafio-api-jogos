@@ -62,21 +62,18 @@ O projeto tem como objetivo simular um sistema de apostas esportivas, ele deve c
 - GET `/eventos`
 - Output
 ```json
-  {
-    "id": 354858757161272,
-    "titulo": "São Paulo x Flamengo",
-    "id_campeonato": 30,
-    "data": "2022-12-20",
-    "opcoes": [
-        { "1": 2.5 }, { "x": 3.1 }, { "2": 1.5 }
-    ],
-    "limites": [
-      { "1": 150 }, { "x": 500 }, { "2": 750 }
-    ]
-  }
-  ```
+{
+  "id": 354858757161272,
+  "titulo": "São Paulo x Flamengo",
+  "id_campeonato": 30,
+  "data": "2022-12-20",
+  "opcoes": [
+    { "1": 2.5 }, { "x": 3.1 }, { "2": 1.5 }
+  ]
+{
+```
   
-  #### Consultar Evento por 'id'
+#### Consultar Evento por 'id'
 - GET `/eventos/354858757161272`
 - Output
 ```json
@@ -87,11 +84,8 @@ O projeto tem como objetivo simular um sistema de apostas esportivas, ele deve c
   "data": "2022-12-10",
   "opcoes": [
     { "1": 1.25 }, { "x": 4.5 }, { "2": 3.9}
-  ],
-  "limites": [
-    { "1": 1000 }, { "x": 1000 }, { "2": 1000 }
   ]
-}
+{
 ```
 
 #### Consultar Eventos por Campeonato
@@ -106,16 +100,14 @@ O projeto tem como objetivo simular um sistema de apostas esportivas, ele deve c
 "titulo":"São Paulo x Flamengo",
 "id_campeonato":30,
 "data":"2022-12-20",
-"opcoes":[{"1":2.5},{"x":3.1},{"2":1.5}],
-"limites":[{"1":150},{"x":500},{"2":750}]
+"opcoes":[{"1":2.5},{"x":3.1},{"2":1.5}]
 }
 {
 "id":354858757161276,
 "titulo":"Ceará x Avaí",
 "id_campeonato":30,
 "data":"2022-08-20",
-"opcoes":[{"1":10.14},{"x":2.5},{"2":1.7}],
-"limites":[{"1":650},{"x":750},{"2":500}]
+"opcoes":[{"1":10.14},{"x":2.5},{"2":1.7}]
 }
 ```
 
@@ -130,9 +122,6 @@ O projeto tem como objetivo simular um sistema de apostas esportivas, ele deve c
   "data": "2022-12-10",
   "opcoes": [
     { "1": 1.25 }, { "x": 4.5 }, { "2": 3.9 }
-  ],
-  "limites": [
-    { "1": 1000 }, { "x": 1000 }, { "2": 1000 }
   ]
 }
 ```
