@@ -14,7 +14,7 @@ import (
 // Chama a função GetJogos do services
 func ListarEventos(w http.ResponseWriter, r *http.Request) {
 
-	respostas.JSON(w, http.StatusOK, api.GetJogos())
+	respostas.JSON(w, http.StatusOK, api.GetEvento())
 }
 
 func ListarEventosID(w http.ResponseWriter, r *http.Request) {
@@ -23,9 +23,9 @@ func ListarEventosID(w http.ResponseWriter, r *http.Request) {
 
 	intkey, _ := strconv.Atoi(key)
 
-	for _, jogo := range api.GetJogos() {
-		if jogo.ID == intkey {
-			json.NewEncoder(w).Encode(jogo)
+	for _, evento := range api.GetEvento() {
+		if evento.ID == intkey {
+			json.NewEncoder(w).Encode(evento)
 			return
 		}
 	}
@@ -37,9 +37,9 @@ func ListarEventosData(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["data"]
 
-	for _, jogo := range api.GetJogos() {
-		if jogo.Data == key {
-			json.NewEncoder(w).Encode(jogo)
+	for _, evento := range api.GetEvento() {
+		if evento.Data == key {
+			json.NewEncoder(w).Encode(evento)
 			return
 		}
 	}
@@ -57,11 +57,12 @@ func ListarEventosCampeonato(w http.ResponseWriter, r *http.Request) {
 		if campeonato.ID == intkey {
 			json.NewEncoder(w).Encode(campeonato)
 		}
+
 	}
 
-	for _, jogo := range api.GetJogos() {
-		if jogo.ID_Campeonato == intkey {
-			json.NewEncoder(w).Encode(jogo)
+	for _, evento := range api.GetEvento() {
+		if evento.ID_Campeonato == intkey {
+			json.NewEncoder(w).Encode(evento)
 		}
 	}
 
