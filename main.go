@@ -8,11 +8,14 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/matheusfelipe20/projeto-api-jogos/src/controllers"
 	"github.com/matheusfelipe20/projeto-api-jogos/src/database"
+	"github.com/matheusfelipe20/projeto-api-jogos/src/middleware"
 )
 
 func main() {
 	database.Load()
 	r := mux.NewRouter()
+
+	r.Use(middleware.ContentTypeMiddleware)
 
 	r.HandleFunc("/campeonatos", controllers.ListarCampeonatos).Methods("GET")
 	r.HandleFunc("/eventos", controllers.ListarEventos).Methods("GET")
