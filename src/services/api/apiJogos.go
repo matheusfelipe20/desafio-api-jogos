@@ -26,3 +26,21 @@ func GetJogos() []models.Jogo {
 	json.Unmarshal(responseData, &jogos)
 	return jogos
 }
+
+func GetEvento() []models.Evento {
+
+	api := "https://apijogos.herokuapp.com/jogos"
+	response, err := http.Get(api)
+	if err != nil {
+		log.Println("erro na resposta")
+	}
+
+	responseData, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Println("erro ao converter o json")
+	}
+
+	var eventos []models.Evento
+	json.Unmarshal(responseData, &eventos)
+	return eventos
+}
