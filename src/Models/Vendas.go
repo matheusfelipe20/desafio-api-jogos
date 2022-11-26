@@ -1,7 +1,7 @@
 package models
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/matheusfelipe20/projeto-api-jogos/src/Models/funcoes"
 )
@@ -10,6 +10,15 @@ import (
 type RespVenda struct {
 	Code    string
 	Message string
+}
+
+type ErroVenda struct {
+	Code string
+	Err  string
+}
+
+func (r *ErroVenda) Error() string {
+	return fmt.Sprintf("StatusCode: %v, Erro: %v", r.Code, r.Err)
 }
 
 type Vendas struct {
@@ -31,31 +40,63 @@ type Vendas struct {
 func (vd *Vendas) ValidarVendas() error {
 
 	if verificarIdJogo := funcoes.ValidadeID(uint64(vd.Id_jogo)); !verificarIdJogo {
-		return errors.New("id do jogo é igual a 0")
+		message := "ID de jogo não encontrado"
+		return &ErroVenda{
+			Code: "400",
+			Err:  message,
+		}
 	}
 
 	if verificarTituloJogo := funcoes.ValidarCampo(vd.Titulo_jogo); !verificarTituloJogo {
-		return errors.New("falha ao cadastrar, insira o titulo do jogo")
+		message := "titulo de jogo inválido"
+		return &ErroVenda{
+			Code: "400",
+			Err:  message,
+		}
 	}
 
 	if verificarCampeonato := funcoes.ValidarCampo(vd.Campeonato); !verificarCampeonato {
-		return errors.New("falha ao cadastrar, insira o campeonato")
+		message := "campeonato inválido"
+		return &ErroVenda{
+			Code: "400",
+			Err:  message,
+		}
 	}
 
 	if verficarDataJogo := funcoes.ValidadeDataVenda(vd.Data_jogo); verficarDataJogo {
-		return errors.New("falha ao cadastrar, insira a data do jogo, ou verfique se o jogo ainda está disponivel")
+		message := "jogo indisponível, horário para apostar ultrapassado"
+		return &ErroVenda{
+			Code: "400",
+			Err:  message,
+		}
 	}
 	if verificarCpfCliente, _ := funcoes.VerificarCPFbyString(vd.Cliente_cpf); !verificarCpfCliente {
-		return errors.New("falha ao cadastrar, cpf inválido")
+		message := "CPF inválido"
+		return &ErroVenda{
+			Code: "400",
+			Err:  message,
+		}
 	}
 	if verificarNomeCliente := funcoes.ValidarCampo(vd.Cliente_nome); !verificarNomeCliente {
-		return errors.New("falha ao cadastrar, insira o nome do cliente")
+		message := "nome do cliente não encontrado"
+		return &ErroVenda{
+			Code: "400",
+			Err:  message,
+		}
 	}
 	if verificarNomeCliente := funcoes.ValidadeDataNascimento(vd.Cliente_nascimento); !verificarNomeCliente {
-		return errors.New("falha ao cadastrar, usuário menor de idade")
+		message := "usuário menor de idade"
+		return &ErroVenda{
+			Code: "400",
+			Err:  message,
+		}
 	}
 	if verificarLimiteAposta := funcoes.ValidadeLimiteValor(vd.Limite_aposta, vd.Valor_aposta); !verificarLimiteAposta {
-		return errors.New("falha ao cadastrar, valor da aposta insuficiente, ou excedeu o limite do valor da aposta")
+		message := "Limite do valor da aposta excedido"
+		return &ErroVenda{
+			Code: "400",
+			Err:  message,
+		}
 	}
 
 	return nil

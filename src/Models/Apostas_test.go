@@ -11,17 +11,20 @@ import (
 	"testing"
 )
 
+var url = "http://localhost:8080"
+
 // Sucess
 func Test_RealizarAposta(t *testing.T) {
 
+	//Cadastro do bilhete de aposta
 	bilhete := []byte(`{
-  		"id_jogo": 354858324654689,
+  		"id_jogo": 354858757161272,
   		"opcao_aposta": "1",
   		"valor_aposta": 100,
   		"cliente_cpf": "368.067.929-79"
     }`)
 
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
+	resp, err := http.Post(url+"/vendas", "application/json",
 		bytes.NewBuffer(bilhete))
 	if err != nil {
 		t.Error(err)
@@ -45,45 +48,37 @@ func Test_RealizarAposta(t *testing.T) {
 	}
 }
 
+//test para validar o limite do valor de aposta
 func Test_ErroValorLimite(t *testing.T) {
 
+	//cadastro do bilhete
 	bilhete := []byte(`{
   		"id_jogo": 354858757161272,
   		"opcao_aposta": "1",
   		"valor_aposta": 200,
   		"cliente_cpf": "368.067.929-79"
     }`)
+	//O limite para o valor da aposta desse jogo "354858757161272" é 150
 
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
+	resp, err := http.Post(url+"/vendas", "application/json",
 		bytes.NewBuffer(bilhete))
 	if err != nil {
 		t.Error(err)
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Println(err)
-		t.Error(err)
-	}
-	pro := Vendas{}
-	err = json.Unmarshal([]byte(string(body)), &pro)
-	if err != nil {
-		log.Println(err)
+	// testando o erro de limite
+	expected := "Aposta realizada com sucesso!"
+	respVend := &ErroVenda{}
+
+	if err := json.NewDecoder(resp.Body).Decode(respVend); err != nil {
+		log.Fatal(err)
 	}
 
-	//Valor do Erro esperado em Bytes
-	expected := `{"erro":"falha ao cadastrar, valor da aposta insuficiente, ou excedeu o limite do valor da aposta"}`
-
-	eq, err := JSONBytesEqual(body, []byte(expected))
-	if err != nil {
-		log.Println(err)
+	if respVend.Error() != expected {
+		t.Errorf("Expected %s, got %s", expected, respVend.Error())
 	}
 
-	//Comparação dos erros: erro recebido pelo body e o erro esperad
-	if !eq {
-		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, expected)
-	}
 }
 
 func Test_ErroIDJogo(t *testing.T) {
@@ -95,7 +90,7 @@ func Test_ErroIDJogo(t *testing.T) {
   		"cliente_cpf": "368.067.929-79"
     }`)
 
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
+	resp, err := http.Post(url+"/vendas", "application/json",
 		bytes.NewBuffer(bilhete))
 	if err != nil {
 		t.Error(err)
@@ -136,7 +131,7 @@ func Test_ErroClienteCpf(t *testing.T) {
   		"cliente_cpf": "400.067.929-82"
     }`)
 
-	resp, err := http.Post("http://localhost:8080/vendas", "application/json",
+	resp, err := http.Post(url+"/vendas", "application/json",
 		bytes.NewBuffer(bilhete))
 	if err != nil {
 		t.Error(err)
