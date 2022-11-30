@@ -19,9 +19,8 @@ func ListarUsuario(w http.ResponseWriter, r *http.Request) {
 		if funcoes.Formated(usuario.Cpf) == cpf {
 			respostas.JSON(w, http.StatusOK, usuario)
 			return
-		}else{
-			respostas.JSON(w, http.StatusNotFound, "Usuário não encontrado")
-			return
 		}
 	}
+
+	respostas.JSON(w, http.StatusNotFound, "Usuário não encontrado")
 }
