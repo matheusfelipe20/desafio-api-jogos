@@ -31,7 +31,7 @@ func Test_RealizarAposta(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	// testando se a venda foi realizada com sucesso
+	//Testando se a venda foi realizada com sucesso
 	expected := "Aposta realizada com sucesso!"
 	respVend := &RespVenda{}
 
@@ -67,28 +67,42 @@ func Test_ErroValorLimite(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	// testando o erro de limite
-	expected := "Aposta realizada com sucesso!"
-	respVend := &ErroVenda{}
-
-	if err := json.NewDecoder(resp.Body).Decode(respVend); err != nil {
-		log.Fatal(err)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err)
+		t.Error(err)
+	}
+	pro := Vendas{}
+	err = json.Unmarshal([]byte(string(body)), &pro)
+	if err != nil {
+		log.Println(err)
 	}
 
-	if respVend.Error() != expected {
-		t.Errorf("Expected %s, got %s", expected, respVend.Error())
+	//Valor do Erro esperado em Bytes
+	expected := `{"erro":"StatusCode: 400, Erro: Limite do valor da aposta excedido}`
+
+	eq, err := JSONBytesEqual(body, []byte(expected))
+	if err != nil {
+		log.Println(err)
+	}
+
+	//Comparação dos erros: erro recebido pelo body e o erro esperad
+	if !eq {
+		t.Errorf("Sem sucesso!! valor recebido: '%s', valor esperado: '%s'", body, expected)
 	}
 
 }
 
 func Test_ErroIDJogo(t *testing.T) {
 
+	//Cadastro do bilhete de aposta
 	bilhete := []byte(`{
   		"id_jogo": 0,
   		"opcao_aposta": "1",
   		"valor_aposta": 100,
   		"cliente_cpf": "368.067.929-79"
     }`)
+	//ID "0" Incorreto
 
 	resp, err := http.Post(url+"/vendas", "application/json",
 		bytes.NewBuffer(bilhete))
@@ -109,7 +123,7 @@ func Test_ErroIDJogo(t *testing.T) {
 	}
 
 	//Valor do Erro esperado em Bytes
-	expected := `{"erro":"id do jogo é igual a 0"}`
+	expected := `{"erro":"StatusCode: 400, Erro: ID de jogo não encontrado}`
 
 	eq, err := JSONBytesEqual(body, []byte(expected))
 	if err != nil {
@@ -124,12 +138,14 @@ func Test_ErroIDJogo(t *testing.T) {
 
 func Test_ErroClienteCpf(t *testing.T) {
 
+	//Cadastro do bilhete de aposta
 	bilhete := []byte(`{
   		"id_jogo": 354858757161272,
   		"opcao_aposta": "1",
   		"valor_aposta": 50,
   		"cliente_cpf": "400.067.929-82"
     }`)
+	//CPF do cliente é inválido (não existente)
 
 	resp, err := http.Post(url+"/vendas", "application/json",
 		bytes.NewBuffer(bilhete))
@@ -150,7 +166,7 @@ func Test_ErroClienteCpf(t *testing.T) {
 	}
 
 	//Valor do Erro esperado em Bytes
-	expected := `{"erro":"falha ao cadastrar, cpf inválido"}`
+	expected := `{"erro":"StatusCode: 400, Erro: CPF inválido}`
 
 	eq, err := JSONBytesEqual(body, []byte(expected))
 	if err != nil {
