@@ -6,7 +6,7 @@ O projeto tem como objetivo simular um sistema de apostas esportivas, ele deve c
 
 ---
 
-## 🔨 Funcionalidades
+## 📌 Funcionalidades
 
 - Realizar apostas: POST `/vendas`;
 - Consultar todas as apostas realizadas: GET `/vendas`;
@@ -157,5 +157,17 @@ O projeto tem como objetivo simular um sistema de apostas esportivas, ele deve c
 }
 ```
 
+---
+
+ ## ✔️ Tecnologias utilizadas
+
+- Golang
+- Heroku
+- PostgreSQL
+
+---
   
-  
+## 🚩 Contribuidores
+
+| [<img src="https://avatars.githubusercontent.com/u/82915269?v=4" width=115><br><sub>Matheus Felipe</sub>](https://github.com/matheusfelipe20) |  [<img src="https://avatars.githubusercontent.com/u/83719621?v=4" width=115><br><sub>Jonas Victor</sub>](https://github.com/jonasvictor) |  [<img src="https://avatars.githubusercontent.com/u/56854144?v=4" width=115><br><sub>Eduardo Lima</sub>](https://github.com/Edwdilima)
+| :---: | :---: | :---: |
